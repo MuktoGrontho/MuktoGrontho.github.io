@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="বইয়ের বিস্তারিত তথ্য ও পাঠকদের মতামত - মুক্তগ্রন্থ">
+    <title>বইয়ের নাম - মুক্তগ্রন্থ</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-brown: #8C6B5D;
+            --primary-green: #5E8B7E;
+            --bg-cream: #FDFBF6;
+            --bg-light: #EAE0D5;
+            --text-dark: #4A3B31;
+        }
+        
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        main { flex: 1; }
+        
+        .btn-primary {
+            background-color: var(--primary-green);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4A7B6F;
+            transform: translateY(-1px);
+        }
+        
+        .book-cover {
+            aspect-ratio: 2/3;
+            background: linear-gradient(135deg, var(--primary-brown), var(--primary-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .review-card {
+            transition: transform 0.2s ease;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .loading { opacity: 0.5; pointer-events: none; }
+        .error { color: #dc2626; background: #fef2f2; border: 1px solid #fecaca; }
+    </style>
+</head>
+<body>
+    <header class="bg-[#EAE0D5] shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-bold text-[#4A3B31]">মুক্তগ্রন্থ</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="text-[#5E8B7E] hover:underline">হোম</a>
+                    <a href="index.html#books" class="text-[#5E8B7E] hover:underline">বইয়ের তালিকা</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Breadcrumb -->
+        <nav class="text-sm mb-6 text-gray-600" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2">
+                <li><a href="index.html" class="text-[#5E8B7E] hover:underline">হোম</a></li>
+                <li class="text-gray-400">›</li>
+                <li><a href="index.html#books" class="text-[#5E8B7E] hover:underline">বইয়ের তালিকা</a></li>
+                <li class="text-gray-400">›</li>
+                <li id="book-title-breadcrumb" class="text-gray-500">লোড হচ্ছে...</li>
+            </ol>
+        </nav>
+
+        <article class="max-w-6xl mx-auto">
+            <!-- Book Header -->
+            <header class="mb-8">
+                <h1 id="book-title" class="text-3xl md:text-4xl font-bold text-[#8C6B5D] mb-2">লোড হচ্ছে...</h1>
+                <p id="author-name" class="text-xl text-gray-700 mb-4">লেখক লোড হচ্ছে...</p>
+            </header>
+
+            <!-- Book Content Grid -->
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Book Cover & Downloads -->
+                <div class="lg:col-span-1">
+                    <div class="sticky top-24">
+                        <div id="cover-image" class="book-cover rounded-lg shadow-lg w-full mb-6">
+                            <div class="text-center">
+                                <svg class="w-16 h-16 mx-auto mb-2 opacity-70" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <p>কভার আর্ট</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <button class="w-full btn-primary text-white px-4 py-3 rounded-md font-semibold" disabled>
+                                📚 ইপাব (EPUB) ডাউনলোড
+                            </button>
+                            <button class="w-full btn-primary text-white px-4 py-3 rounded-md font-semibold" disabled>
+                                📱 মোবি (MOBI) ডাউনলোড
+                            </button>
+                            <p class="text-sm text-gray-600 text-center">শীঘ্রই উপলব্ধ হবে</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book Details & Reviews -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- About the Book -->
+                    <section>
+                        <h2 class="text-2xl font-semibold mb-4 text-[#5E8B7E]">বই সম্পর্কে</h2>
+                        <div id="book-description" class="prose max-w-none text-gray-700">
+                            <p>বইয়ের বিবরণ লোড হচ্ছে...</p>
+                        </div>
+                    </section>
+
+                    <!-- Book Metadata -->
+                    <section>
+                        <h3 class="text-xl font-semibold mb-3 text-[#5E8B7E]">বইয়ের তথ্য</h3>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <dl class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <dt class="font-semibold text-gray-600">ধরন:</dt>
+                                    <dd id="meta-genre">লোড হচ্ছে...</dd>
+                                </div>
+                                <div>
+                                    <dt class="font-semibold text-gray-600">লেখকের মৃত্যু সাল:</dt>
+                                    <dd id="meta-death-year">লোড হচ্ছে...</dd>
+                                </div>
+                                <div>
+                                    <dt class="font-semibold text-gray-600">ভাষা:</dt>
+                                    <dd>বাংলা</dd>
+                                </div>
+                                <div>
+                                    <dt class="font-semibold text-gray-600">লাইসেন্স:</dt>
+                                    <dd>পাবলিক ডোমেইন</dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </section>
+
+                    <!-- Reviews Section -->
+                    <section id="reviews-section">
+                        <h2 class="text-2xl font-semibold mb-4 text-[#5E8B7E]">পাঠকদের মতামত</h2>
+                        
+                        <!-- Add Review Form -->
+                        <div class="bg-white rounded-lg shadow p-6 mb-6">
+                            <h3 class="text-lg font-semibold mb-3">আপনার মতামত জানান</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="reviewer-name" class="block text-sm font-medium mb-1">নাম (ঐচ্ছিক)</label>
+                                    <input type="text" id="reviewer-name" class="w-full p-2 border rounded-md" placeholder="আপনার নাম">
+                                </div>
+                                <div>
+                                    <label for="review-rating" class="block text-sm font-medium mb-1">রেটিং</label>
+                                    <select id="review-rating" class="p-2 border rounded-md">
+                                        <option value="5">⭐⭐⭐⭐⭐ চমৎকার</option>
+                                        <option value="4">⭐⭐⭐⭐ খুব ভালো</option>
+                                        <option value="3">⭐⭐⭐ ভালো</option>
+                                        <option value="2">⭐⭐ মোটামুটি</option>
+                                        <option value="1">⭐ খারাপ</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="review-text" class="block text-sm font-medium mb-1">মতামত</label>
+                                    <textarea id="review-text" rows="4" class="w-full p-3 border rounded-md" placeholder="এই বই সম্পর্কে আপনার মতামত লিখুন..."></textarea>
+                                </div>
+                                <button id="submit-review" class="btn-primary text-white px-6 py-2 rounded-md font-semibold">
+                                    মতামত জমা দিন
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Reviews List -->
+                        <div id="reviews-list" class="space-y-4">
+                            <p class="text-gray-600 text-center py-8">এখনো কোনো মতামত নেই। আপনি প্রথম মতামত দিন!</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-[#EAE0D5] text-[#4A3B31] py-8 mt-auto">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; ২০২৪ মুক্তগ্রন্থ। সর্বস্বত্ব CC BY-NC-SA 4.0 এর অধীনে সংরক্ষিত।</p>
+            <p class="text-sm mt-1">একটি উন্মুক্ত উদ্যোগ, বাংলা সাহিত্যের সেবায় নিবেদিত।</p>
+        </div>
+    </footer>
+
+    <script>
+        class BookPage {
+            constructor() {
+                this.bookData = null;
+                this.reviews = [];
+                this.bookTitle = this.getBookTitleFromURL();
+                this.init();
+            }
+
+            getBookTitleFromURL() {
+                const params = new URLSearchParams(window.location.search);
+                return params.get('title') || '';
+            }
+
+            async init() {
+                await this.loadBookData();
+                this.loadReviews();
+                this.setupEventListeners();
+            }
+
+            async loadBookData() {
+                try {
+                    const response = await fetch('./data/books.json');
+                    if (!response.ok) throw new Error('Failed to load book data');
+                    
+                    const books = await response.json();
+                    this.bookData = books.find(book => book.title === this.bookTitle);
+                    
+                    if (this.bookData) {
+                        this.renderBookData();
+                    } else {
+                        this.showError('বইটি খুঁজে পাওয়া যায়নি');
+                    }
+                } catch (error) {
+                    console.error('Error loading book data:', error);
+                    this.showError('বইয়ের তথ্য লোড করতে সমস্যা হয়েছে');
+                }
+            }
+
+            renderBookData() {
+                const { title, author, genre, deathYear, description } = this.bookData;
+                
+                // Update page title and meta
+                document.title = `${title} - মুক্তগ্রন্থ`;
+                
+                // Update content
+                document.getElementById('book-title').textContent = title;
+                document.getElementById('book-title-breadcrumb').textContent = title;
+                
+                // Author with link
+                const authorElement = document.getElementById('author-name');
+                authorElement.innerHTML = `<a href="author.html?author=${encodeURIComponent(author)}" class="text-[#5E8B7E] hover:underline">${this.escapeHtml(author)}</a>`;
+                
+                // Metadata
+                document.getElementById('meta-genre').textContent = genre || 'অজানা';
+                document.getElementById('meta-death-year').textContent = deathYear || 'অজানা';
+                
+                // Description
+                const descriptionElement = document.getElementById('book-description');
+                if (description) {
+                    descriptionElement.innerHTML = `<p>${this.escapeHtml(description)}</p>`;
+                } else {
+                    descriptionElement.innerHTML = '<p>এই বইয়ের সংক্ষিপ্ত বিবরণ এখনো যোগ করা হয়নি।</p>';
+                }
+
+                // Update cover with book title
+                const coverElement = document.getElementById('cover-image');
+                coverElement.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-lg font-bold mb-2">${this.escapeHtml(title)}</div>
+                        <div class="text-sm opacity-80">${this.escapeHtml(author)}</div>
+                    </div>
+                `;
+            }
+
+            loadReviews() {
+                const key = `reviews:${this.bookTitle}`;
+                const stored = localStorage.getItem(key);
+                this.reviews = stored ? JSON.parse(stored) : [];
+                this.renderReviews();
+            }
+
+            saveReviews() {
+                const key = `reviews:${this.bookTitle}`;
+                localStorage.setItem(key, JSON.stringify(this.reviews));
+            }
+
+            renderReviews() {
+                const container = document.getElementById('reviews-list');
+                
+                if (this.reviews.length === 0) {
+                    container.innerHTML = '<p class="text-gray-600 text-center py-8">এখনো কোনো মতামত নেই। আপনি প্রথম মতামত দিন!</p>';
+                    return;
+                }
+
+                container.innerHTML = this.reviews.map(review => `
+                    <div class="review-card bg-white rounded-lg shadow p-6">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <h4 class="font-semibold">${this.escapeHtml(review.name || 'অজ্ঞাত পাঠক')}</h4>
+                                <div class="text-yellow-500">${'⭐'.repeat(review.rating)}</div>
+                            </div>
+                            <time class="text-sm text-gray-500">${this.formatDate(review.date)}</time>
+                        </div>
+                        <p class="text-gray-700">${this.escapeHtml(review.text)}</p>
+                    </div>
+                `).join('');
+            }
+
+            setupEventListeners() {
+                document.getElementById('submit-review').addEventListener('click', () => {
+                    this.submitReview();
+                });
+            }
+
+            submitReview() {
+                const name = document.getElementById('reviewer-name').value.trim();
+                const rating = parseInt(document.getElementById('review-rating').value);
+                const text = document.getElementById('review-text').value.trim();
+
+                if (!text) {
+                    alert('অনুগ্রহ করে মতামত লিখুন।');
+                    return;
+                }
+
+                const review = {
+                    id: Date.now(),
+                    name: name || 'অজ্ঞাত পাঠক',
+                    rating,
+                    text,
+                    date: new Date().toISOString()
+                };
+
+                this.reviews.unshift(review);
+                this.saveReviews();
+                this.renderReviews();
+
+                // Clear form
+                document.getElementById('reviewer-name').value = '';
+                document.getElementById('review-text').value = '';
+                document.getElementById('review-rating').value = '5';
+
+                // Show success message
+                this.showSuccessMessage('আপনার মতামত যোগ করা হয়েছে। ধন্যবাদ!');
+            }
+
+            showError(message) {
+                document.getElementById('book-title').textContent = message;
+                document.getElementById('book-description').innerHTML = `<p class="text-red-600">${message}</p>`;
+            }
+
+            showSuccessMessage(message) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                alertDiv.textContent = message;
+                document.body.appendChild(alertDiv);
+
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 3000);
+            }
+
+            formatDate(dateString) {
+                return new Date(dateString).toLocaleDateString('bn-BD', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+
+            escapeHtml(unsafe) {
+                return unsafe.replace(/[&<>"']/g, m => ({
+                    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+                }[m]));
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new BookPage();
+        });
+    </script>
+</body>
+</html>

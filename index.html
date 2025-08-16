@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="মুক্তগ্রন্থ - বাংলা সাহিত্যের উচ্চমানের ডিজিটাল সংস্করণ। বিনামূল্যে পাবলিক ডোমেইন বই পড়ুন।">
+    <meta name="keywords" content="বাংলা বই, পাবলিক ডোমেইন, ই-বই, বাংলা সাহিত্য, মুক্তগ্রন্থ">
+    <meta name="author" content="মুক্তগ্রন্থ">
+    <title>মুক্তগ্রন্থ - বাংলা সাহিত্যের ডিজিটাল সংস্করণ</title>
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="মুক্তগ্রন্থ - বাংলা সাহিত্যের ডিজিটাল সংস্করণ">
+    <meta property="og:description" content="বাংলা সাহিত্যের উচ্চমানের ডিজিটাল সংস্করণ। বিনামূল্যে পাবলিক ডোমেইন বই পড়ুন।">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://muktogrontho.github.io">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/shared.css">
+    
+    <style>
+        :root {
+            --primary-brown: #8C6B5D;
+            --primary-green: #5E8B7E;
+            --bg-cream: #FDFBF6;
+            --bg-light: #EAE0D5;
+            --text-dark: #4A3B31;
+            --border-light: #DCD0C0;
+        }
+        
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        main {
+            flex: 1;
+        }
+        
+        .nav-link {
+            transition: all 0.2s ease;
+            color: var(--text-dark) !important;
+            text-decoration: none !important;
+        }
+        
+        .nav-link:hover {
+            background-color: var(--primary-brown);
+            color: white !important;
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary-brown);
+            color: white !important;
+        }
+        
+        /* Ensure navigation is visible */
+        .hidden.md\\:flex {
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .hidden.md\\:flex {
+                display: flex !important;
+            }
+        }
+        
+        /* Make navigation visible by default on desktop */
+        @media (min-width: 768px) {
+            .nav-container {
+                display: flex !important;
+            }
+        }
+        
+        .section-title {
+            color: var(--primary-brown);
+        }
+        
+        .card {
+            transition: transform 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-green);
+            transition: background-color 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4A7B6F;
+        }
+        
+        .accordion-button {
+            background-color: var(--bg-light);
+            transition: background-color 0.2s ease;
+        }
+        
+        .accordion-button:hover {
+            background-color: var(--border-light);
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            height: 300px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-width: 500px;
+            }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-cream);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-brown);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #705448;
+        }
+        
+        /* Loading state */
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        /* Error state */
+        .error {
+            color: #dc2626;
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-[#EAE0D5] shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="text-xl font-bold text-[#4A3B31]">📚 মুক্তগ্রন্থ</a>
+                </div>
+                <div class="nav-container hidden md:flex">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#home" class="nav-link px-4 py-2 rounded-md text-sm font-medium active" data-section="home">হোম</a>
+                        <a href="#roadmap" class="nav-link px-4 py-2 rounded-md text-sm font-medium" data-section="roadmap">প্রকল্পের ধাপ</a>
+                        <a href="#books" class="nav-link px-4 py-2 rounded-md text-sm font-medium" data-section="books">প্রস্তাবিত বই</a>
+                        <a href="/book.html" class="nav-link px-4 py-2 rounded-md text-sm font-medium">বই</a>
+                        <a href="/blog.html" class="nav-link px-4 py-2 rounded-md text-sm font-medium">ব্লগ</a>
+                        <a href="#standards" class="nav-link px-4 py-2 rounded-md text-sm font-medium" data-section="standards">কারিগরী মান</a>
+                        <a href="#contribute" class="nav-link px-4 py-2 rounded-md text-sm font-medium" data-section="contribute">সম্পৃক্ততা</a>
+                        <a href="#sources" class="nav-link px-4 py-2 rounded-md text-sm font-medium" data-section="sources">উৎস</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button type="button" id="mobile-menu-button" class="bg-[#8C6B5D] inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-[#705448] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">মেনু খুলুন</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="nav-link block px-3 py-2 rounded-md text-base font-medium active" data-section="home">হোম</a>
+                <a href="#roadmap" class="nav-link block px-3 py-2 rounded-md text-base font-medium" data-section="roadmap">প্রকল্পের ধাপ</a>
+                <a href="#books" class="nav-link block px-3 py-2 rounded-md text-base font-medium" data-section="books">প্রস্তাবিত বই</a>
+                <a href="/book.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium">বই</a>
+                <a href="/blog.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium">ব্লগ</a>
+                <a href="#standards" class="nav-link block px-3 py-2 rounded-md text-base font-medium" data-section="standards">কারিগরী মান</a>
+                <a href="#contribute" class="nav-link block px-3 py-2 rounded-md text-base font-medium" data-section="contribute">সম্পৃক্ততা</a>
+                <a href="#sources" class="nav-link block px-3 py-2 rounded-md text-base font-medium" data-section="sources">উৎস</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Home Section -->
+        <section id="home" class="content-section">
+            <h1 class="section-title text-3xl font-semibold mb-6">আমাদের প্রকল্প: মুক্তগ্রন্থ</h1>
+            <div class="space-y-6 text-lg leading-relaxed">
+                <p>এই প্রকল্পটি একটি উন্মুক্ত উদ্যোগ যার লক্ষ্য বাংলা সাহিত্যের পাবলিক ডোমেইনে থাকা মূল্যবান বইগুলোকে উচ্চ গুণমানসম্পন্ন, সুবিন্যস্ত ও আধুনিক ই-বই আকারে তৈরি এবং বিনামূল্যে বিতরণ করা। আমরা স্ট্যান্ডার্ড ইবুকস (standardebooks.org) প্রকল্পের আদর্শ ও পদ্ধতি অনুসরণ করে বাংলা সাহিত্যের জন্য একটি অনুরূপ প্ল্যাটফর্ম তৈরি করতে আগ্রহী।</p>
+                <p>আমাদের মূল উদ্দেশ্য হলো বাংলা সাহিত্যের ক্লাসিক রচনাগুলোকে ডিজিটাল যুগে সংরক্ষণ করা এবং বিশ্বব্যাপী পাঠকদের কাছে সহজলভ্য করে তোলা।</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mt-8">
+                    <div class="card bg-white p-6 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-semibold mb-3 text-[#5E8B7E]">স্ট্যান্ডার্ড ইবুকস থেকে অনুপ্রেরণা</h2>
+                        <p class="text-base">স্ট্যান্ডার্ড ইবুকস প্রকল্পটি বিনামূল্যে পাবলিক ডোমেইন কাজের উচ্চমানের ডিজিটাল সংস্করণ তৈরির ক্ষেত্রে একটি চমৎকার মানদণ্ড স্থাপন করেছে।</p>
+                    </div>
+                    <div class="card bg-white p-6 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-semibold mb-3 text-[#5E8B7E]">আমাদের লক্ষ্য</h2>
+                        <ul class="list-disc list-inside space-y-2 text-base">
+                            <li>বাংলা সাহিত্যের সেরা কাজগুলোর আধুনিক ই-বই সংস্করণ তৈরি</li>
+                            <li>ই-বইগুলো বিনামূল্যে সকলের জন্য উপলব্ধ করা</li>
+                            <li>শক্তিশালী স্বেচ্ছাসেবী কমিউনিটি তৈরি</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Books Section -->
+        <section id="books" class="content-section hidden">
+            <h1 class="section-title text-3xl font-semibold mb-6">প্রস্তাবিত বইয়ের তালিকা</h1>
+            <p class="mb-6 text-lg leading-relaxed">এই প্রকল্পটি শুরু করার জন্য আমরা প্রাথমিকভাবে ৫০টি জনপ্রিয় ও গুরুত্বপূর্ণ বাংলা বইয়ের একটি তালিকা তৈরি করেছি।</p>
+
+            <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" id="bookSearch" class="p-2 border border-[#DCD0C0] rounded-md text-sm" placeholder="বই বা লেখকের নাম দিয়ে খুঁজুন...">
+                <select id="genreFilter" class="p-2 border border-[#DCD0C0] rounded-md text-sm">
+                    <option value="">সব ধরণ</option>
+                </select>
+                <select id="authorFilter" class="p-2 border border-[#DCD0C0] rounded-md text-sm">
+                    <option value="">সব লেখক</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 overflow-x-auto bg-white p-4 rounded-lg shadow">
+                    <table class="w-full table-auto border-collapse" id="booksTable">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-2 border border-[#DCD0C0] bg-[#EAE0D5] text-[#4A3B31] font-semibold sortable" data-sort="title">বইয়ের নাম</th>
+                                <th class="px-4 py-2 border border-[#DCD0C0] bg-[#EAE0D5] text-[#4A3B31] font-semibold sortable" data-sort="author">লেখক</th>
+                                <th class="px-4 py-2 border border-[#DCD0C0] bg-[#EAE0D5] text-[#4A3B31] font-semibold sortable" data-sort="genre">ধরন</th>
+                                <th class="px-4 py-2 border border-[#DCD0C0] bg-[#EAE0D5] text-[#4A3B31] font-semibold sortable" data-sort="deathYear">মৃত্যু সাল</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booksTableBody">
+                        </tbody>
+                    </table>
+                    <p id="noResults" class="text-center py-4 hidden">কোনো বই পাওয়া যায়নি।</p>
+                </div>
+                <div class="lg:col-span-1 bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-xl font-semibold mb-4 text-center text-[#5E8B7E]">বইয়ের ধরন অনুযায়ী পরিসংখ্যান</h3>
+                    <div class="chart-container">
+                        <canvas id="genreChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Other sections would go here... -->
+        <section id="roadmap" class="content-section hidden">
+            <h1 class="section-title text-3xl font-semibold mb-6">প্রকল্পের পর্যায়ক্রমিক রূপরেখা</h1>
+            <p class="mb-8 text-lg leading-relaxed">এই প্রকল্পটি একটি দীর্ঘমেয়াদী উদ্যোগ এবং এর সফল বাস্তবায়নের জন্য একটি পর্যায়ক্রমিক পরিকল্পনা অনুসরণ করা হবে।</p>
+            
+            <div class="space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-semibold mb-2 text-[#5E8B7E]">প্রথম পর্যায়: ভিত্তি স্থাপন (১-৬ মাস)</h2>
+                    <ul class="list-disc list-inside space-y-1 text-base text-gray-700">
+                        <li>গিটহাব রিপোজিটরি তৈরি এবং প্রাথমিক কাঠামো ও ডকুমেন্টেশন প্রস্তুত করা</li>
+                        <li>প্রাথমিক টুলচেইন নির্বাচন ও নথিভুক্ত করা</li>
+                        <li>প্রকল্পের নাম ও ব্র্যান্ডিং চূড়ান্ত করা</li>
+                        <li>৩-৫টি গুরুত্বপূর্ণ বই নির্বাচন করা</li>
+                        <li>একটি কোর টিম গঠন এবং যোগাযোগের মাধ্যম স্থাপন করা</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-semibold mb-2 text-[#5E8B7E]">দ্বিতীয় পর্যায়: সম্প্রসারণ (৭-১৮ মাস)</h2>
+                    <ul class="list-disc list-inside space-y-1 text-base text-gray-700">
+                        <li>টুলচেইনকে আরও শক্তিশালী করা</li>
+                        <li>বিস্তারিত টাইপোগ্রাফিক ও সেমান্টিক নিয়মাবলীসহ স্টাইল গাইড সমৃদ্ধ করা</li>
+                        <li>আরও স্বেচ্ছাসেবী প্রযোজক ও প্রুফরিডার নিয়োগ ও প্রশিক্ষণ</li>
+                        <li>তালিকা থেকে আরও বেশি বই নিয়ে কাজ শুরু করা</li>
+                        <li>একটি পূর্ণাঙ্গ ওয়েবসাইট চালু করা</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-semibold mb-2 text-[#5E8B7E]">তৃতীয় পর্যায়: পরিপক্কতা (চলমান)</h2>
+                    <ul class="list-disc list-inside space-y-1 text-base text-gray-700">
+                        <li>স্ট্যান্ডার্ড ইবুকস-এর সমতুল্য পূর্ণাঙ্গ মান বজায় রেখে নিয়মিত বই প্রকাশ</li>
+                        <li>কাজের পদ্ধতিতে আরও অটোমেশন যুক্ত করা</li>
+                        <li>শক্তিশালী, বহু-স্তরীয় মান নিয়ন্ত্রণ পদ্ধতি প্রতিষ্ঠা</li>
+                        <li>গ্রন্থাগার ও শিক্ষা প্রতিষ্ঠানের সাথে অংশীদারিত্ব</li>
+                        <li>টুলসেট এবং ডকুমেন্টেশন ক্রমাগত রক্ষণাবেক্ষণ</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="standards" class="content-section hidden">
+            <h1 class="section-title text-3xl font-semibold mb-6">গুরুত্বপূর্ণ কারিগরী নির্দেশিকা</h1>
+            <p class="mb-8 text-lg leading-relaxed">উচ্চ গুণমানসম্পন্ন বাংলা ই-বই তৈরির জন্য আধুনিক কারিগরী মান অনুসরণ করা অপরিহার্য।</p>
+            
+            <div class="space-y-4">
+                <div class="bg-white rounded-lg shadow">
+                    <button class="w-full text-left px-6 py-4 bg-[#EAE0D5] hover:bg-[#DCD0C0] rounded-t-lg font-semibold text-[#4A3B31] focus:outline-none transition-colors" onclick="toggleAccordion('epub3')">
+                        ইপাব৩ (EPUB3) ফরম্যাট
+                    </button>
+                    <div id="epub3" class="hidden px-6 py-4 bg-white rounded-b-lg">
+                        <p class="mb-3">ইপাব৩ হলো ই-বইয়ের বর্তমান ইন্ডাস্ট্রি স্ট্যান্ডার্ড। এটি HTML5, CSS3 এবং JavaScript এর পূর্ণ সুবিধা প্রদান করে।</p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            <li>জটিল লেআউট, টাইপোগ্রাফি এবং মাল্টিমিডিয়া সমর্থন</li>
+                            <li>অ্যাক্সেসিবিলিটি বৈশিষ্ট্য প্রদান</li>
+                            <li>ইউনিকোডের মাধ্যমে বাংলাসহ বিভিন্ন ভাষার চমৎকার সমর্থন</li>
+                            <li>শক্তিশালী মেটাডেটা অন্তর্ভুক্ত করার সুবিধা</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow">
+                    <button class="w-full text-left px-6 py-4 bg-[#EAE0D5] hover:bg-[#DCD0C0] rounded-t-lg font-semibold text-[#4A3B31] focus:outline-none transition-colors" onclick="toggleAccordion('unicode')">
+                        ইউনিকোড ও বাংলা লিপি
+                    </button>
+                    <div id="unicode" class="hidden px-6 py-4 bg-white rounded-b-lg">
+                        <p class="mb-3">বাংলা লিপির সঠিক প্রদর্শনের জন্য ইউনিকোড এনকোডিং এবং উপযুক্ত ফন্ট অপরিহার্য।</p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            <li>সমস্ত টেক্সট বাংলার জন্য নির্ধারিত ইউনিকোড ব্লক ব্যবহার</li>
+                            <li>যুক্তাক্ষর ও কার-চিহ্ন সঠিক রেন্ডারিং</li>
+                            <li>বিশেষ চিহ্ন ও নুকতা ব্যবহারে সর্বোচ্চ সতর্কতা</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow">
+                    <button class="w-full text-left px-6 py-4 bg-[#EAE0D5] hover:bg-[#DCD0C0] rounded-t-lg font-semibold text-[#4A3B31] focus:outline-none transition-colors" onclick="toggleAccordion('licensing')">
+                        লাইসেন্সিং: CC BY-NC-SA 4.0
+                    </button>
+                    <div id="licensing" class="hidden px-6 py-4 bg-white rounded-b-lg">
+                        <p class="mb-3">প্রকল্পের লক্ষ্য হলো ই-বইগুলো বিনামূল্যে সকলের জন্য উপলব্ধ করা।</p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            <li><strong>অ্যাট্রিবিউশন (BY):</strong> মূল প্রকল্পের কৃতিত্ব দিতে হবে</li>
+                            <li><strong>ননকমার্শিয়াল (NC):</strong> বাণিজ্যিক উদ্দেশ্যে ব্যবহার করা যাবে না</li>
+                            <li><strong>শেয়ারঅ্যালাইক (SA):</strong> পরিবর্তিত সংস্করণ একই লাইসেন্সের অধীনে শেয়ার করতে হবে</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contribute" class="content-section hidden">
+            <h1 class="section-title text-3xl font-semibold mb-6">আমাদের সাথে সম্পৃক্ত হোন</h1>
+            <div class="space-y-6 text-lg leading-relaxed">
+                <p>এই প্রকল্পটি একটি স্বেচ্ছাসেবী উদ্যোগ এবং এর সাফল্য নির্ভর করে আপনাদের সক্রিয় অংশগ্রহণের উপর।</p>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-semibold mb-3 text-[#5E8B7E]">কিভাবে অবদান রাখবেন?</h2>
+                        <ul class="list-disc list-inside space-y-2 text-base text-gray-700">
+                            <li><strong>ই-বই তৈরি:</strong> আমাদের টুলসেট ও স্টাইল গাইড অনুসরণ করে ই-বই সংস্করণ তৈরি</li>
+                            <li><strong>প্রুফরিডিং:</strong> তৈরি করা ই-বইগুলোর ভুলত্রুটি সংশোধন</li>
+                            <li><strong>টাইপোগ্রাফি:</strong> বাংলা টাইপোগ্রাফি এবং সেমান্টিক মার্কআপ</li>
+                            <li><strong>উৎস সন্ধান:</strong> পাবলিক ডোমেইনে থাকা বাংলা বইয়ের নির্ভরযোগ্য উৎস</li>
+                            <li><strong>টুলস উন্নয়ন:</strong> প্রকল্পের টুলসেট বা ডকুমেন্টেশন উন্নয়ন</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h2 class="text-2xl font-semibold mb-3 text-[#5E8B7E]">যোগাযোগ ও অংশগ্রহণ</h2>
+                        <p class="text-base mb-4">আমাদের সাথে যুক্ত হতে এবং প্রকল্পে অবদান রাখতে, আমাদের গিটহাব রিপোজিটরিটি দেখুন।</p>
+                        <div class="space-y-3">
+                            <a href="https://github.com/MuktoGrontho" target="_blank" class="block w-full bg-[#5E8B7E] text-white px-4 py-3 rounded-md text-center font-semibold hover:bg-[#4A7B6F] transition-colors">
+                                GitHub এ যোগ দিন
+                            </a>
+                            <a href="mailto:contact@muktogrontho.org" class="block w-full bg-gray-600 text-white px-4 py-3 rounded-md text-center font-semibold hover:bg-gray-700 transition-colors">
+                                ইমেইল করুন
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sources" class="content-section hidden">
+            <h1 class="section-title text-3xl font-semibold mb-6">বাংলা পাবলিক ডোমেইন পাঠ্য উৎসসমূহ</h1>
+            <p class="mb-8 text-lg leading-relaxed">বাংলা পাবলিক ডোমেইন বইয়ের উৎস খুঁজে বের করা এই প্রকল্পের একটি গুরুত্বপূর্ণ ধাপ।</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold mb-2 text-[#5E8B7E]">ন্যাশনাল ডিজিটাল লাইব্রেরি অফ ইন্ডিয়া (NDLI)</h2>
+                    <p class="text-sm text-gray-700">ভারত সরকারের একটি বৃহৎ উদ্যোগ। এখানে বহু ভাষায় লক্ষ লক্ষ বই ও শিক্ষামূলক সামগ্রী রয়েছে।</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold mb-2 text-[#5E8B7E]">ইন্টারনেট আর্কাইভ</h2>
+                    <p class="text-sm text-gray-700">অলাভজনক ডিজিটাল লাইব্রেরি যেখানে প্রচুর পরিমাণে ডিজিটাইজ করা বই রয়েছে।</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold mb-2 text-[#5E8B7E]">বেঙ্গল অনলাইন</h2>
+                    <p class="text-sm text-gray-700">পাবলিক ডোমেইনে থাকা বাংলা সাহিত্যের একটি আর্কাইভ, প্রজেক্ট গুটেনবার্গের অনুরূপ।</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold mb-2 text-[#5E8B7E]">উইকিসংকলন</h2>
+                    <p class="text-sm text-gray-700">উইকিমিডিয়া ফাউন্ডেশনের প্রকল্প যেখানে স্বেচ্ছাসেবকরা পাবলিক ডোমেইন বই সংরক্ষণ করেন।</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold mb-2 text-[#5E8B7E]">ন্যাশনাল আর্কাইভস অফ বাংলাদেশ</h2>
+                    <p class="text-sm text-gray-700">সরকারি গেজেট, জেলা রেকর্ড, পুরনো সংবাদপত্রসহ বিভিন্ন ঐতিহাসিক দলিলপত্র।</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold mb-2 text-[#5E8B7E]">পশ্চিমবঙ্গ পাবলিক লাইব্রেরি নেটওয়ার্ক</h2>
+                    <p class="text-sm text-gray-700">পশ্চিমবঙ্গ সরকারের উদ্যোগে পাবলিক লাইব্রেরিগুলোর নেটওয়ার্ক।</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#EAE0D5] text-[#4A3B31] py-8 mt-auto">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; ২০২৪ মুক্তগ্রন্থ। সর্বস্বত্ব CC BY-NC-SA 4.0 এর অধীনে সংরক্ষিত।</p>
+            <p class="text-sm mt-1">একটি উন্মুক্ত উদ্যোগ, বাংলা সাহিত্যের সেবায় নিবেদিত।</p>
+        </div>
+    </footer>
+
+    <script>
+        // App State
+        const AppState = {
+            bookData: [],
+            currentSort: { column: 'title', order: 'asc' },
+            genreChart: null,
+            isLoading: false
+        };
+
+        // DOM Elements
+        const elements = {
+            get navLinks() { return document.querySelectorAll('.nav-link'); },
+            get contentSections() { return document.querySelectorAll('.content-section'); },
+            get mobileMenuButton() { return document.getElementById('mobile-menu-button'); },
+            get mobileMenu() { return document.getElementById('mobile-menu'); },
+            get booksTableBody() { return document.getElementById('booksTableBody'); },
+            get bookSearchInput() { return document.getElementById('bookSearch'); },
+            get genreFilterSelect() { return document.getElementById('genreFilter'); },
+            get authorFilterSelect() { return document.getElementById('authorFilter'); },
+            get noResultsElement() { return document.getElementById('noResults'); }
+        };
+
+        // Utility Functions
+        const utils = {
+            debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            },
+
+            escapeHtml(unsafe) {
+                return unsafe.replace(/[&<>"']/g, m => ({
+                    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+                }[m]));
+            },
+
+            showLoading(element) {
+                element.classList.add('loading');
+            },
+
+            hideLoading(element) {
+                element.classList.remove('loading');
+            },
+
+            showError(message, container) {
+                container.innerHTML = `<div class="error">${message}</div>`;
+            }
+        };
+
+        // Navigation
+        function switchSection(sectionId) {
+            elements.contentSections.forEach(section => {
+                section.classList.toggle('hidden', section.id !== sectionId);
+            });
+            
+            elements.navLinks.forEach(link => {
+                link.classList.toggle('active', link.dataset.section === sectionId);
+            });
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Books functionality
+        async function loadBooksData() {
+            if (AppState.isLoading) return;
+            
+            AppState.isLoading = true;
+            const tableContainer = document.querySelector('#booksTable').parentElement;
+            utils.showLoading(tableContainer);
+
+            try {
+                const response = await fetch('./data/books.json');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                AppState.bookData = await response.json();
+                populateDropdowns();
+                filterAndRenderBooks();
+                updateSortIndicator(document.querySelector(`#booksTable th[data-sort="${AppState.currentSort.column}"]`));
+            } catch (error) {
+                console.error("Could not load book data:", error);
+                utils.showError('বইয়ের তালিকা লোড করা সম্ভব হয়নি।', elements.booksTableBody);
+            } finally {
+                AppState.isLoading = false;
+                utils.hideLoading(tableContainer);
+            }
+        }
+
+        function populateDropdowns() {
+            const genres = [...new Set(AppState.bookData.map(book => book.genre))].sort();
+            const authors = [...new Set(AppState.bookData.map(book => book.author))].sort((a, b) => a.localeCompare(b, 'bn'));
+
+            // Clear existing options
+            elements.genreFilterSelect.innerHTML = '<option value="">সব ধরণ</option>';
+            elements.authorFilterSelect.innerHTML = '<option value="">সব লেখক</option>';
+
+            genres.forEach(genre => {
+                const option = document.createElement('option');
+                option.value = genre;
+                option.textContent = genre;
+                elements.genreFilterSelect.appendChild(option);
+            });
+
+            authors.forEach(author => {
+                const option = document.createElement('option');
+                option.value = author;
+                option.textContent = author;
+                elements.authorFilterSelect.appendChild(option);
+            });
+        }
+
+        function renderTable(filteredBooks) {
+            elements.booksTableBody.innerHTML = '';
+            
+            if (filteredBooks.length === 0) {
+                elements.noResultsElement.classList.remove('hidden');
+                return;
+            }
+            
+            elements.noResultsElement.classList.add('hidden');
+
+            filteredBooks.forEach(book => {
+                const row = elements.booksTableBody.insertRow();
+                row.innerHTML = `
+                    <td class="px-4 py-2 border border-[#DCD0C0]">
+                        <a href="book.html?title=${encodeURIComponent(book.title)}" class="text-[#5E8B7E] hover:underline">
+                            ${utils.escapeHtml(book.title)}
+                        </a>
+                    </td>
+                    <td class="px-4 py-2 border border-[#DCD0C0]">
+                        <a href="author.html?author=${encodeURIComponent(book.author)}" class="text-[#5E8B7E] hover:underline">
+                            ${utils.escapeHtml(book.author)}
+                        </a>
+                    </td>
+                    <td class="px-4 py-2 border border-[#DCD0C0]">${utils.escapeHtml(book.genre)}</td>
+                    <td class="px-4 py-2 border border-[#DCD0C0]">${book.deathYear}</td>
+                `;
+            });
+        }
+
+        function sortData(books, column, order) {
+            return [...books].sort((a, b) => {
+                let valA = a[column];
+                let valB = b[column];
+
+                if (typeof valA === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
+                    return order === 'asc' ? valA.localeCompare(valB, 'bn') : valB.localeCompare(valA, 'bn');
+                }
+                
+                return order === 'asc' ? valA - valB : valB - valA;
+            });
+        }
+
+        function filterAndRenderBooks() {
+            const searchTerm = elements.bookSearchInput.value.toLowerCase();
+            const selectedGenre = elements.genreFilterSelect.value;
+            const selectedAuthor = elements.authorFilterSelect.value;
+
+            let filteredBooks = AppState.bookData.filter(book => {
+                const titleMatch = book.title.toLowerCase().includes(searchTerm) || 
+                                 book.author.toLowerCase().includes(searchTerm);
+                const genreMatch = !selectedGenre || book.genre === selectedGenre;
+                const authorMatch = !selectedAuthor || book.author === selectedAuthor;
+                return titleMatch && genreMatch && authorMatch;
+            });
+
+            filteredBooks = sortData(filteredBooks, AppState.currentSort.column, AppState.currentSort.order);
+            renderTable(filteredBooks);
+            renderGenreChart(filteredBooks);
+        }
+
+        function renderGenreChart(books) {
+            const genreCounts = books.reduce((acc, book) => {
+                acc[book.genre] = (acc[book.genre] || 0) + 1;
+                return acc;
+            }, {});
+
+            const sortedGenres = Object.entries(genreCounts)
+                .sort(([,a], [,b]) => b - a)
+                .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+
+            if (AppState.genreChart) {
+                AppState.genreChart.destroy();
+            }
+
+            AppState.genreChart = new Chart(document.getElementById('genreChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(sortedGenres),
+                    datasets: [{
+                        data: Object.values(sortedGenres),
+                        backgroundColor: [
+                            '#8C6B5D', '#5E8B7E', '#A57F60', '#7BA79D', '#C49A7B',
+                            '#98C2BB', '#E0B596', '#B5DED6', '#4A3B31', '#DCD0C0'
+                        ],
+                        borderColor: '#FDFBF6',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#4A3B31',
+                                font: { family: "'Hind Siliguri', sans-serif", size: 12 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateSortIndicator(clickedHeader) {
+            // Clear all indicators first
+            document.querySelectorAll('#booksTable th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            
+            if (clickedHeader) {
+                if (AppState.currentSort.order === 'asc') {
+                    clickedHeader.classList.add('sort-asc');
+                } else {
+                    clickedHeader.classList.add('sort-desc');
+                }
+            }
+        }
+
+        // Event Listeners
+        function initializeEventListeners() {
+            // Navigation
+            elements.navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const sectionId = e.target.dataset.section;
+                    if (sectionId) {
+                        switchSection(sectionId);
+                        
+                        // Close mobile menu
+                        if (!elements.mobileMenu.classList.contains('hidden')) {
+                            elements.mobileMenu.classList.add('hidden');
+                            elements.mobileMenuButton.setAttribute('aria-expanded', 'false');
+                        }
+                    }
+                });
+            });
+
+            // Mobile menu
+            elements.mobileMenuButton.addEventListener('click', () => {
+                const isExpanded = elements.mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                elements.mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+                elements.mobileMenu.classList.toggle('hidden');
+                
+                const svgs = elements.mobileMenuButton.querySelectorAll('svg');
+                svgs.forEach(svg => svg.classList.toggle('hidden'));
+            });
+
+            // Table sorting
+            document.querySelectorAll('#booksTable th[data-sort]').forEach(header => {
+                header.addEventListener('click', () => {
+                    const column = header.dataset.sort;
+                    if (AppState.currentSort.column === column) {
+                        AppState.currentSort.order = AppState.currentSort.order === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        AppState.currentSort.column = column;
+                        AppState.currentSort.order = 'asc';
+                    }
+                    updateSortIndicator(header);
+                    filterAndRenderBooks();
+                });
+            });
+
+            // Search and filters
+            const debouncedFilter = utils.debounce(filterAndRenderBooks, 300);
+            elements.bookSearchInput?.addEventListener('input', debouncedFilter);
+            elements.genreFilterSelect?.addEventListener('change', filterAndRenderBooks);
+            elements.authorFilterSelect?.addEventListener('change', filterAndRenderBooks);
+        }
+
+        // Accordion functionality
+        function toggleAccordion(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle('hidden');
+        }
+
+        // Accordion functionality
+        function toggleAccordion(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle('hidden');
+        }
+
+        // Make toggleAccordion globally available
+        window.toggleAccordion = toggleAccordion;
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEventListeners();
+            switchSection('home');
+            
+            // Load books data when books section is accessed
+            elements.navLinks.forEach(link => {
+                if (link.dataset.section === 'books') {
+                    link.addEventListener('click', () => {
+                        if (AppState.bookData.length === 0) {
+                            loadBooksData();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

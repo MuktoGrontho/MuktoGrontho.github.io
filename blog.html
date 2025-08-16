@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="মুক্তগ্রন্থ প্রকল্পের সংবাদ ও আপডেট">
+    <title>ব্লগ - মুক্তগ্রন্থ</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/shared.css">
+    <script src="assets/js/shared.js"></script>
+    
+    <style>
+        .blog-card {
+            transition: all 0.2s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header will be inserted by shared.js -->
+    <header id="site-header"></header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Blog Header -->
+            <header class="text-center mb-12">
+                <h1 class="text-3xl md:text-4xl font-bold text-[#8C6B5D] mb-4">মুক্তগ্রন্থ ব্লগ</h1>
+                <p class="text-lg text-gray-700">প্রকল্পের সংবাদ, আপডেট এবং বাংলা সাহিত্য সম্পর্কিত লেখা</p>
+            </header>
+
+            <!-- Blog Posts -->
+            <div class="space-y-8">
+                <!-- Welcome Post -->
+                <article class="blog-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="p-6">
+                        <header class="mb-4">
+                            <h2 class="text-2xl font-bold mb-2">
+                                <a href="#" class="text-[#8C6B5D] hover:text-[#5E8B7E]">মুক্তগ্রন্থ প্রকল্পে স্বাগতম</a>
+                            </h2>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <time datetime="2024-08-15">১৫ আগস্ট, ২০২৪</time>
+                                <span class="mx-2">•</span>
+                                <span>প্রকল্প সংবাদ</span>
+                            </div>
+                        </header>
+                        
+                        <div class="prose max-w-none">
+                            <p>বাংলা সাহিত্যের ডিজিটাল সংরক্ষণ ও বিতরণের উদ্দেশ্যে আমরা শুরু করেছি 'মুক্তগ্রন্থ' প্রকল্প। এই প্রকল্পের মূল লক্ষ্য হল পাবলিক ডোমেইনে থাকা বাংলা সাহিত্যের উচ্চমানের ডিজিটাল সংস্করণ তৈরি করা।</p>
+                            
+                            <p>স্ট্যান্ডার্ড ইবুকস প্রকল্প থেকে অনুপ্রাণিত হয়ে আমরা একইভাবে কঠোর মান নিয়ন্ত্রণ ও আধুনিক প্রযুক্তির মাধ্যমে বাংলা ক্লাসিক সাহিত্যকে নতুন প্রজন্মের কাছে পৌঁছে দিতে চাই।</p>
+                        </div>
+                        
+                        <footer class="mt-4 pt-4 border-t border-gray-200">
+                            <a href="#" class="text-[#5E8B7E] hover:underline font-medium">বিস্তারিত পড়ুন →</a>
+                        </footer>
+                    </div>
+                </article>
+
+                <!-- Technical Standards Post -->
+                <article class="blog-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="p-6">
+                        <header class="mb-4">
+                            <h2 class="text-2xl font-bold mb-2">
+                                <a href="#" class="text-[#8C6B5D] hover:text-[#5E8B7E]">কারিগরি মান ও EPUB3 ফরম্যাট</a>
+                            </h2>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <time datetime="2024-08-10">১০ আগস্ট, ২০২৪</time>
+                                <span class="mx-2">•</span>
+                                <span>কারিগরি</span>
+                            </div>
+                        </header>
+                        
+                        <div class="prose max-w-none">
+                            <p>আমাদের প্রকল্পে আমরা EPUB3 ফরম্যাট ব্যবহার করব, যা বর্তমানে ই-বুকের আন্তর্জাতিক মান। এই ফরম্যাট HTML5, CSS3 এবং জাভাস্ক্রিপ্টের সম্পূর্ণ সুবিধা প্রদান করে।</p>
+                            
+                            <p>বিশেষত বাংলা ভাষার জন্য আমরা ইউনিকোড এনকোডিং এবং উন্নত টাইপোগ্রাফি ব্যবহার করব যাতে সঠিক রেন্ডারিং নিশ্চিত হয়।</p>
+                        </div>
+                        
+                        <footer class="mt-4 pt-4 border-t border-gray-200">
+                            <a href="#" class="text-[#5E8B7E] hover:underline font-medium">বিস্তারিত পড়ুন →</a>
+                        </footer>
+                    </div>
+                </article>
+
+                <!-- Book Selection Post -->
+                <article class="blog-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="p-6">
+                        <header class="mb-4">
+                            <h2 class="text-2xl font-bold mb-2">
+                                <a href="#" class="text-[#8C6B5D] hover:text-[#5E8B7E]">প্রাথমিক বই নির্বাচন প্রক্রিয়া</a>
+                            </h2>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <time datetime="2024-08-05">৫ আগস্ট, ২০২৪</time>
+                                <span class="mx-2">•</span>
+                                <span>বই নির্বাচন</span>
+                            </div>
+                        </header>
+                        
+                        <div class="prose max-w-none">
+                            <p>আমাদের প্রাথমিক তালিকায় রয়েছে বঙ্কিমচন্দ্র চট্টোপাধ্যায়, রবীন্দ্রনাথ ঠাকুর, শরৎচন্দ্র চট্টোপাধ্যায়, বিভূতিভূষণ বন্দ্যোপাধ্যায়ের মতো দিকপাল লেখকদের অমর সৃষ্টি।</p>
+                            
+                            <p>প্রতিটি বই নির্বাচনের সময় আমরা তার সাহিত্যিক গুরুত্ব, পাবলিক ডোমেইন স্ট্যাটাস এবং উৎস পাঠ্যের গুণমান বিবেচনা করি।</p>
+                        </div>
+                        
+                        <footer class="mt-4 pt-4 border-t border-gray-200">
+                            <a href="#" class="text-[#5E8B7E] hover:underline font-medium">বিস্তারিত পড়ুন →</a>
+                        </footer>
+                    </div>
+                </article>
+
+                <!-- Call to Action -->
+                <div class="bg-gradient-to-r from-[#8C6B5D] to-[#5E8B7E] rounded-lg p-8 text-white text-center">
+                    <h3 class="text-2xl font-bold mb-4">আমাদের সাথে যুক্ত হন</h3>
+                    <p class="mb-6">এই মহৎ উদ্যোগে অংশ নিয়ে বাংলা সাহিত্যের ডিজিটাল ভবিষ্যৎ গড়তে সাহায্য করুন</p>
+                    <a href="index.html#contribute" class="bg-white text-[#8C6B5D] px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                        অবদান রাখুন
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="mt-12 lg:mt-0">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-[#8C6B5D]">সাম্প্রতিক আপডেট</h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="#" class="block hover:text-[#5E8B7E]">
+                                <div class="font-medium">ওয়েবসাইট লঞ্চ</div>
+                                <div class="text-sm text-gray-600">১৫ আগস্ট, ২০২৪</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block hover:text-[#5E8B7E]">
+                                <div class="font-medium">প্রাথমিক বই তালিকা প্রকাশ</div>
+                                <div class="text-sm text-gray-600">১০ আগস্ট, ২০২৪</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="block hover:text-[#5E8B7E]">
+                                <div class="font-medium">প্রকল্প পরিকল্পনা চূড়ান্ত</div>
+                                <div class="text-sm text-gray-600">৫ আগস্ট, ২০২৪</div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer will be inserted by shared.js -->
+    <footer id="site-footer"></footer>
+
+</body>
+</html>

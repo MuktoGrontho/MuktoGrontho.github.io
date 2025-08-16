@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="বইয়ের বিস্তারিত তথ্য ও ডাউনলোড - মুক্তগ্রন্থ">
+    <title>বইয়ের তথ্য - মুক্তগ্রন্থ</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/shared.css">
+    
+    <style>
+        :root {
+            --primary-brown: #8C6B5D;
+            --primary-green: #5E8B7E;
+            --bg-cream: #FDFBF6;
+            --bg-light: #EAE0D5;
+            --text-dark: #4A3B31;
+            --border-light: #DCD0C0;
+        }
+        
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        main {
+            flex: 1;
+        }
+        
+        .book-cover {
+            background: linear-gradient(135deg, var(--primary-brown), var(--primary-green));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link {
+            transition: all 0.2s ease;
+            color: var(--text-dark) !important;
+            text-decoration: none !important;
+        }
+        
+        .nav-link:hover {
+            background-color: var(--primary-brown);
+            color: white !important;
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary-brown);
+            color: white !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4A7B6F;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-brown);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            border: 2px solid var(--primary-brown);
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary-brown);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .info-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .rating-stars {
+            color: #fbbf24;
+            font-size: 1.25rem;
+        }
+        
+        .rating-empty {
+            color: #d1d5db;
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-[#EAE0D5] shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-xl font-bold text-[#4A3B31]">📚 মুক্তগ্রন্থ</a>
+                </div>
+                <div class="hidden md:flex">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="nav-link px-4 py-2 rounded-md text-sm font-medium">হোম</a>
+                        <a href="index.html#books" class="nav-link px-4 py-2 rounded-md text-sm font-medium">বইয়ের তালিকা</a>
+                        <a href="book.html" class="nav-link px-4 py-2 rounded-md text-sm font-medium active">বই</a>
+                        <a href="blog.html" class="nav-link px-4 py-2 rounded-md text-sm font-medium">ব্লগ</a>
+                        <a href="index.html#contribute" class="nav-link px-4 py-2 rounded-md text-sm font-medium">অবদান</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button type="button" id="mobile-menu-button" class="bg-[#8C6B5D] inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-[#705448] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">মেনু খুলুন</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium">হোম</a>
+                <a href="index.html#books" class="nav-link block px-3 py-2 rounded-md text-base font-medium">বইয়ের তালিকা</a>
+                <a href="book.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium active">বই</a>
+                <a href="blog.html" class="nav-link block px-3 py-2 rounded-md text-base font-medium">ব্লগ</a>
+                <a href="index.html#contribute" class="nav-link block px-3 py-2 rounded-md text-base font-medium">অবদান</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Breadcrumb -->
+        <nav class="text-sm mb-6 text-gray-600" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2">
+                <li><a href="index.html" class="text-[#5E8B7E] hover:underline">হোম</a></li>
+                <li><span class="text-gray-400">›</span></li>
+                <li><a href="index.html#books" class="text-[#5E8B7E] hover:underline">বইয়ের তালিকা</a></li>
+                <li><span class="text-gray-400">›</span></li>
+                <li><span class="text-gray-500" id="breadcrumb-title">বইয়ের তথ্য</span></li>
+            </ol>
+        </nav>
+
+        <!-- Book Details -->
+        <div class="info-card">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8" id="book-details">
+                <!-- Book Cover -->
+                <div class="md:col-span-1">
+                    <div class="book-cover w-full h-80" id="book-cover">
+                        📖 বইয়ের প্রচ্ছদ
+                    </div>
+                </div>
+                
+                <!-- Book Information -->
+                <div class="md:col-span-3">
+                    <h1 class="text-3xl font-bold mb-4 text-[#8C6B5D]" id="book-title">বইয়ের নাম</h1>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-lg">
+                                    <span class="font-semibold text-[#4A3B31]">লেখক:</span> 
+                                    <a href="#" class="text-[#5E8B7E] hover:underline" id="book-author">লেখকের নাম</a>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-lg">
+                                    <span class="font-semibold text-[#4A3B31]">ধরন:</span> 
+                                    <span id="book-genre">ধরন</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-lg">
+                                    <span class="font-semibold text-[#4A3B31]">প্রকাশনা:</span> 
+                                    <span id="book-publication">প্রকাশনার তথ্য</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-lg">
+                                    <span class="font-semibold text-[#4A3B31]">লেখকের মৃত্যু:</span> 
+                                    <span id="book-death-year">মৃত্যুর সাল</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-lg">
+                                    <span class="font-semibold text-[#4A3B31]">পৃষ্ঠা সংখ্যা:</span> 
+                                    <span id="book-pages">আনুমানিক ২৫০ পৃষ্ঠা</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-lg">
+                                    <span class="font-semibold text-[#4A3B31]">ভাষা:</span> 
+                                    <span id="book-language">বাংলা</span>
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <span class="font-semibold text-[#4A3B31]">রেটিং:</span>
+                            <div class="flex items-center space-x-1">
+                                <span class="rating-stars">★★★★★</span>
+                                <span class="text-gray-600">(৪.৮/৫.০ - ১২৪ জন পাঠক)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3 text-[#8C6B5D]">বইয়ের সংক্ষিপ্ত বিবরণ</h3>
+                        <p class="text-gray-700 leading-relaxed" id="book-description">
+                            এটি বাংলা সাহিত্যের একটি অমূল্য রত্ন। লেখকের অনন্য লেখনী শৈলী এবং গভীর অন্তর্দৃষ্টি পাঠকদের মুগ্ধ করে। 
+                            এই বইটি বাংলা ভাষা ও সংস্কৃতির একটি গুরুত্বপূর্ণ দলিল হিসেবে বিবেচিত। প্রতিটি পাতায় রয়েছে জীবনের 
+                            গভীর দর্শন এবং মানবিক মূল্যবোধের প্রতিফলন।
+                        </p>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="btn-primary" id="download-btn">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            EPUB ডাউনলোড
+                        </a>
+                        
+                        <a href="#" class="btn-secondary" id="pdf-download-btn">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            PDF ডাউনলোড
+                        </a>
+                        
+                        <button class="btn-secondary" id="favorite-btn">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            পছন্দের তালিকায় যোগ করুন
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <!-- About Author -->
+            <div class="info-card">
+                <h2 class="text-2xl font-bold mb-4 text-[#8C6B5D]">লেখক সম্পর্কে</h2>
+                <div id="author-info">
+                    <p class="text-gray-700 leading-relaxed mb-4">
+                        বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ কথাশিল্পী। তাঁর রচনাবলী বাংলা ভাষা ও সংস্কৃতির অমূল্য সম্পদ। 
+                        তিনি তাঁর লেখনীর মাধ্যমে বাংলা সাহিত্যে এক অনন্য স্থান করে নিয়েছেন।
+                    </p>
+                    <a href="#" class="text-[#5E8B7E] hover:underline font-medium" id="author-link">লেখকের অন্যান্য বই দেখুন →</a>
+                </div>
+            </div>
+            
+            <!-- Book Stats -->
+            <div class="info-card">
+                <h2 class="text-2xl font-bold mb-4 text-[#8C6B5D]">পরিসংখ্যান</h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">মোট ডাউনলোড:</span>
+                        <span class="font-semibold">১,২৩৪ বার</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">গড় রেটিং:</span>
+                        <span class="font-semibold">৪.৮/৫.০</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">মোট পর্যালোচনা:</span>
+                        <span class="font-semibold">১২ৄ টি</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">ফাইল সাইজ (EPUB):</span>
+                        <span class="font-semibold">১.২ MB</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">ফাইল সাইজ (PDF):</span>
+                        <span class="font-semibold">২.৮ MB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Books -->
+        <div class="info-card">
+            <h2 class="text-2xl font-bold mb-6 text-[#8C6B5D]">সম্পর্কিত বই</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6" id="related-books">
+                <!-- Related books will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-[#EAE0D5] text-[#4A3B31] py-8 mt-auto border-t border-[#DCD0C0]">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-3 text-[#8C6B5D]">মুক্তগ্রন্থ</h3>
+                    <p class="text-sm text-gray-600">বাংলা সাহিত্যের উচ্চমানের ডিজিটাল সংস্করণ। বিনামূল্যে পাবলিক ডোমেইন বই পড়ুন।</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">দ্রুত লিঙ্ক</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="text-[#5E8B7E] hover:underline">হোম</a></li>
+                        <li><a href="index.html#books" class="text-[#5E8B7E] hover:underline">বইয়ের তালিকা</a></li>
+                        <li><a href="blog.html" class="text-[#5E8B7E] hover:underline">ব্লগ</a></li>
+                        <li><a href="index.html#contribute" class="text-[#5E8B7E] hover:underline">অবদান রাখুন</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">যোগাযোগ</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://github.com/MuktoGrontho" target="_blank" class="text-[#5E8B7E] hover:underline">GitHub</a></li>
+                        <li><a href="mailto:contact@muktogrontho.org" class="text-[#5E8B7E] hover:underline">ইমেইল</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-[#DCD0C0] mt-6 pt-6 text-center text-sm text-gray-600">
+                <p>&copy; ২০২৫ মুক্তগ্রন্থ। সর্বস্বত্ব <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" class="text-[#5E8B7E] hover:underline">CC BY-NC-SA 4.0</a> এর অধীনে সংরক্ষিত।</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('hidden');
+                
+                const svgs = mobileMenuButton.querySelectorAll('svg');
+                svgs.forEach(svg => svg.classList.toggle('hidden'));
+            });
+        }
+
+        // Book data and functionality
+        const bookData = {
+            'দুর্গেশনন্দিনী': {
+                title: 'দুর্গেশনন্দিনী',
+                author: 'বঙ্কিমচন্দ্র চট্টোপাধ্যায়',
+                genre: 'উপন্যাস',
+                deathYear: 1894,
+                publication: 'বঙ্গদর্শন, ১৮৬৫',
+                pages: '৩২০',
+                description: 'বঙ্কিমচন্দ্রের প্রথম প্রকাশিত উপন্যাস "দুর্গেশনন্দিনী"। মুঘল ও পাঠান যুগের পটভূমিতে রচিত এই উপন্যাসে রয়েছে প্রেম, বীরত্ব ও আত্মত্যাগের অনুপম কাহিনী। জগৎ সিংহ ও আয়েষা খাতুনের প্রেমকাহিনী এবং দুর্গেশনন্দিনীর চরিত্র বাংলা সাহিত্যে চিরস্মরণীয় হয়ে আছে।'
+            },
+            'গীতাঞ্জলি': {
+                title: 'গীতাঞ্জলি',
+                author: 'রবীন্দ্রনাথ ঠাকুর',
+                genre: 'কবিতা',
+                deathYear: 1941,
+                publication: 'ভারতী প্রকাশনী, ১৯১০',
+                pages: '১৫৬',
+                description: 'রবীন্দ্রনাথ ঠাকুরের অমর কাব্যগ্রন্থ "গীতাঞ্জলি"। এই কাব্যগ্রন্থের জন্য তিনি ১৯১৩ সালে সাহিত্যে নোবেল পুরস্কার লাভ করেন। ভগবানের প্রতি ভক্তি, প্রেম ও আত্মার আকুতি এই কাব্যের মূল বিষয়। প্রতিটি কবিতা আধ্যাত্মিক চেতনা ও গভীর দর্শনে পূর্ণ।'
+            },
+            'দেবদাস': {
+                title: 'দেবদাস',
+                author: 'শরৎচন্দ্র চট্টোপাধ্যায়',
+                genre: 'উপন্যাস',
+                deathYear: 1938,
+                publication: 'ভারতী প্রকাশনী, ১৯১৭',
+                pages: '২৮৮',
+                description: 'শরৎচন্দ্রের বিখ্যাত উপন্যাস "দেবদাস"। দেবদাস ও পার্বতীর অসম্পূর্ণ প্রেমকাহিনী বাংলা সাহিত্যের অন্যতম জনপ্রিয় রচনা। সামাজিক বিধিনিষেধ ও শ্রেণীবৈষম্যের বিরুদ্ধে এক হৃদয়বিদারক আখ্যান।'
+            }
+        };
+
+        // Book data loading from JSON
+        async function loadBookDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookTitle = urlParams.get('title') || 'দুর্গেশনন্দিনী'; // Default book
+            
+            try {
+                // Try to load from enhanced data first
+                const response = await fetch('data/books-enhanced.json');
+                if (response.ok) {
+                    const books = await response.json();
+                    const book = books.find(b => b.title === bookTitle);
+                    
+                    if (book) {
+                        populateBookDetails(book);
+                        loadRelatedBooks(book.author, book.title, books);
+                        return;
+                    }
+                }
+                
+                // Fallback to static data
+                const book = bookData[bookTitle];
+                if (book) {
+                    populateBookDetails(book);
+                    loadRelatedBooks(book.author, book.title, Object.values(bookData));
+                }
+            } catch (error) {
+                console.error('Error loading book data:', error);
+                // Use fallback static data
+                const book = bookData[bookTitle];
+                if (book) {
+                    populateBookDetails(book);
+                    loadRelatedBooks(book.author, book.title, Object.values(bookData));
+                }
+            }
+        }
+
+        function populateBookDetails(book) {
+            // Update page title
+            document.title = `${book.title} - মুক্তগ্রন্থ`;
+            
+            // Update breadcrumb
+            document.getElementById('breadcrumb-title').textContent = book.title;
+            
+            // Update book details
+            document.getElementById('book-title').textContent = book.title;
+            document.getElementById('book-author').textContent = book.author;
+            document.getElementById('book-genre').textContent = book.genre;
+            document.getElementById('book-publication').textContent = book.publication || 'প্রকাশনার তথ্য উপলব্ধ নেই';
+            document.getElementById('book-death-year').textContent = book.deathYear;
+            document.getElementById('book-pages').textContent = (book.pages || '250') + ' পৃষ্ঠা';
+            document.getElementById('book-description').textContent = book.description || 'এটি বাংলা সাহিত্যের একটি অমূল্য রত্ন। লেখকের অনন্য লেখনী শৈলী এবং গভীর অন্তর্দৃষ্টি পাঠকদের মুগ্ধ করে।';
+            
+            // Update book cover
+            document.getElementById('book-cover').innerHTML = `📖<br>${book.title}`;
+            
+            // Update author link
+            document.getElementById('author-link').href = `author.html?name=${encodeURIComponent(book.author)}`;
+            
+            // Update statistics if available
+            if (book.downloads) {
+                const statsSection = document.querySelector('.info-card:last-of-type .space-y-3');
+                statsSection.innerHTML = `
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">মোট ডাউনলোড:</span>
+                        <span class="font-semibold">${book.downloads.toLocaleString('bn-BD')} বার</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">গড় রেটিং:</span>
+                        <span class="font-semibold">${book.rating || 4.8}/৫.০</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">মোট পর্যালোচনা:</span>
+                        <span class="font-semibold">${book.reviews || 124} টি</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">ফাইল সাইজ (EPUB):</span>
+                        <span class="font-semibold">${book.epubSize || '1.2 MB'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">ফাইল সাইজ (PDF):</span>
+                        <span class="font-semibold">${book.pdfSize || '2.8 MB'}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function loadRelatedBooks(author, currentTitle, allBooks) {
+            const relatedBooksContainer = document.getElementById('related-books');
+            const relatedBooks = allBooks.filter(book => 
+                book.author === author && book.title !== currentTitle
+            ).slice(0, 4);
+            
+            if (relatedBooks.length === 0) {
+                relatedBooksContainer.innerHTML = '<p class="text-gray-600 col-span-full text-center">এই লেখকের অন্য কোনো বই এখনো যোগ করা হয়নি।</p>';
+                return;
+            }
+            
+            relatedBooksContainer.innerHTML = relatedBooks.map(book => `
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="book-cover w-full h-32 text-sm mb-3">
+                        📖<br>${book.title}
+                    </div>
+                    <h4 class="font-semibold text-sm mb-2 line-clamp-2">${book.title}</h4>
+                    <p class="text-gray-600 text-xs mb-3">${book.author}</p>
+                    <a href="book.html?title=${encodeURIComponent(book.title)}" 
+                       class="text-[#5E8B7E] hover:underline text-sm font-medium">
+                        বিস্তারিত দেখুন →
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        // Button functionality
+        document.getElementById('download-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('EPUB ডাউনলোড শীঘ্রই উপলব্ধ হবে!');
+        });
+
+        document.getElementById('pdf-download-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('PDF ডাউনলোড শীঘ্রই উপলব্ধ হবে!');
+        });
+
+        document.getElementById('favorite-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            const btn = e.currentTarget;
+            if (btn.classList.contains('favorited')) {
+                btn.classList.remove('favorited');
+                btn.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                    পছন্দের তালিকায় যোগ করুন
+                `;
+                alert('পছন্দের তালিকা থেকে সরানো হয়েছে!');
+            } else {
+                btn.classList.add('favorited');
+                btn.innerHTML = `
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                    </svg>
+                    পছন্দের তালিকায় যোগ করা হয়েছে
+                `;
+                alert('পছন্দের তালিকায় যোগ করা হয়েছে!');
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBookDetails();
+        });
+    </script>
+</body>
+</html>
