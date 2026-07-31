@@ -1,0 +1,29 @@
+---
+interface Props {
+  title: string;
+  author: string;
+  genre: string;
+  status: "planned" | "in-progress" | "published";
+  coverColor: string;
+  slug: string;
+}
+
+const { title, author, genre, status, coverColor, slug } = Astro.props;
+
+const statusLabels: Record<string, string> = {
+  "planned": "পরিকল্পিত",
+  "in-progress": "চলমান",
+  "published": "প্রকাশিত",
+};
+---
+
+<a href={`/books/${slug}/`} class="book-card">
+  <div class="book-cover" style={`background: linear-gradient(160deg, ${coverColor}, color-mix(in oklch, ${coverColor}, #000 35%));`}>
+    <div class="book-cover-title">{title}</div>
+    <div class="book-cover-author">{author}</div>
+  </div>
+  <div class="book-meta">
+    <span class="genre-tag">{genre}</span>
+    <span class="status-badge" data-status={status}>{statusLabels[status]}</span>
+  </div>
+</a>

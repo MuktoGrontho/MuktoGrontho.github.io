@@ -1,0 +1,190 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import BookCard from "../components/BookCard.astro";
+import { getCollection } from "astro:content";
+
+const allBooks = await getCollection("books");
+
+// Stats
+const totalBooks = allBooks.length;
+const genres = [...new Set(allBooks.map((b) => b.data.genre))];
+const authors = [...new Set(allBooks.map((b) => b.data.author))];
+const inProgress = allBooks.filter((b) => b.data.status === "in-progress");
+
+// Featured books (pilot + some picks)
+const featured = allBooks
+  .filter((b) => b.data.priority === "high")
+  .slice(0, 5);
+
+// Latest additions (rest, shuffled)
+const recent = allBooks
+  .filter((b) => b.data.priority !== "high")
+  .sort(() => Math.random() - 0.5)
+  .slice(0, 8);
+---
+
+<BaseLayout title="মুক্তগ্রন্থ — উচ্চমানের বাংলা ই-বই" currentPath="/">
+  <!-- Hero -->
+  <section class="home-hero">
+    <div class="container">
+      <h1>মুক্তগ্রন্থ</h1>
+      <p class="tagline">উচ্চমানের বাংলা ই-বই, সকলের জন্য মুক্ত।</p>
+      <p class="tagline-en">High-quality Bengali public domain ebooks, free for everyone.</p>
+      <div class="home-hero-actions">
+        <a href="/books/" class="btn btn-primary">📚 ই-বই দেখুন</a>
+        <a
+          href="https://github.com/MuktoGrontho/muktogrontho"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-secondary"
+        >
+          GitHub ↗
+        </a>
+      </div>
+      <div class="home-stats">
+        <div class="home-stat">
+          <span class="home-stat-number">{totalBooks}</span>
+          <span class="home-stat-label">প্রস্তাবিত বই</span>
+        </div>
+        <div class="home-stat">
+          <span class="home-stat-number">{genres.length}</span>
+          <span class="home-stat-label">ধরন</span>
+        </div>
+        <div class="home-stat">
+          <span class="home-stat-number">{authors.length}</span>
+          <span class="home-stat-label">লেখক</span>
+        </div>
+        <div class="home-stat">
+          <span class="home-stat-number">{inProgress.length}</span>
+          <span class="home-stat-label">চলমান</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Currently In Progress -->
+  {inProgress.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">📖 চলমান কাজ</h2>
+        <p class="section-subtitle">
+          এই বইগুলো বর্তমানে তৈরি হচ্ছে — শীঘ্রই প্রকাশিত হবে।
+        </p>
+        <div class="book-grid">
+          {featured.map((book) => (
+            <BookCard
+              title={book.data.title}
+              author={book.data.author}
+              genre={book.data.genre}
+              status={book.data.status}
+              coverColor={book.data.coverColor}
+              slug={book.id}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Browse by Genre -->
+  <section class="section" style="background:var(--color-bg-alt);">
+    <div class="container">
+      <h2 class="section-title">📂 ধরন অনুযায়ী ব্রাউজ করুন</h2>
+      <div class="genre-browse">
+        {genres.sort((a, b) => a.localeCompare(b, "bn")).map((genre) => {
+          const count = allBooks.filter((b) => b.data.genre === genre).length;
+          return (
+            <a href={`/books/?genre=${encodeURIComponent(genre)}`} class="genre-browse-item">
+              <span class="genre-browse-name">{genre}</span>
+              <span class="genre-browse-count">{count}</span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- More Books -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">📚 আরও বই</h2>
+      <p class="section-subtitle">আমাদের সংগ্রহ থেকে আরও কিছু বই।</p>
+      <div class="book-grid">
+        {recent.map((book) => (
+          <BookCard
+            title={book.data.title}
+            author={book.data.author}
+            genre={book.data.genre}
+            status={book.data.status}
+            coverColor={book.data.coverColor}
+            slug={book.id}
+          />
+        ))}
+      </div>
+      <div style="text-align:center;margin-top:var(--space-2xl);">
+        <a href="/books/" class="btn btn-secondary">সব বই দেখুন →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Links -->
+  <section class="section" style="background:var(--color-bg-alt);">
+    <div class="container">
+      <div class="card-grid">
+        <a href="/about/" class="card" style="text-decoration:none;color:inherit;">
+          <div class="card-icon">✨</div>
+          <h3>আমাদের সম্পর্কে</h3>
+          <p>মুক্তগ্রন্থ প্রকল্পের লক্ষ্য, অনুপ্রেরণা ও কারিগরী মান জানুন।</p>
+        </a>
+        <a href="/contribute/" class="card" style="text-decoration:none;color:inherit;">
+          <div class="card-icon">🤝</div>
+          <h3>অবদান রাখুন</h3>
+          <p>প্রুফরিডিং, ই-বই তৈরি, টুল উন্নয়ন — আপনিও যোগ দিন।</p>
+        </a>
+        <a href="/roadmap/" class="card" style="text-decoration:none;color:inherit;">
+          <div class="card-icon">🗺️</div>
+          <h3>রোডম্যাপ</h3>
+          <p>প্রকল্পের ভবিষ্যৎ পরিকল্পনা ও বর্তমান অবস্থা দেখুন।</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .genre-browse {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .genre-browse-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .genre-browse-item:hover {
+    background: var(--color-brand-bg);
+    border-color: var(--color-brand);
+    color: var(--color-brand-text);
+  }
+
+  .genre-browse-count {
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--color-brand-bg);
+    color: var(--color-brand-text);
+    padding: 1px 6px;
+    border-radius: var(--radius-pill);
+  }
+</style>

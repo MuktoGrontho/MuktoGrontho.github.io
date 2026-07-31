@@ -1,0 +1,174 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BookCard from "../../components/BookCard.astro";
+import { getCollection } from "astro:content";
+
+const allBooks = await getCollection("books");
+
+// Get unique genres and authors for filter dropdowns
+const genres = [...new Set(allBooks.map((b) => b.data.genre))].sort((a, b) =>
+  a.localeCompare(b, "bn")
+);
+const authors = [...new Set(allBooks.map((b) => b.data.author))].sort((a, b) =>
+  a.localeCompare(b, "bn")
+);
+
+// Sort books by title
+const sortedBooks = allBooks.sort((a, b) =>
+  a.data.title.localeCompare(b.data.title, "bn")
+);
+
+// Prepare JSON for client-side search
+const booksJson = sortedBooks.map((b) => ({
+  slug: b.id,
+  title: b.data.title,
+  titleEn: b.data.titleEn,
+  author: b.data.author,
+  authorEn: b.data.authorEn,
+  genre: b.data.genre,
+  genreEn: b.data.genreEn,
+  status: b.data.status,
+  coverColor: b.data.coverColor,
+  yearPublished: b.data.yearPublished,
+  authorDeathYear: b.data.authorDeathYear,
+}));
+---
+
+<BaseLayout
+  title="ই-বই সংগ্রহ"
+  description="মুক্তগ্রন্থের সমস্ত বাংলা ই-বই ব্রাউজ করুন।"
+  currentPath="/books/"
+>
+  <section class="page-header">
+    <div class="container">
+      <h1>📚 ই-বই সংগ্রহ</h1>
+      <p class="subtitle">
+        {allBooks.length}টি বাংলা সাহিত্যের বই — খুঁজুন, ফিল্টার করুন, আবিষ্কার করুন।
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <!-- Filters -->
+      <div class="catalog-toolbar" id="catalog-toolbar">
+        <input
+          type="search"
+          class="catalog-search"
+          id="book-search"
+          placeholder="বই বা লেখকের নাম দিয়ে খুঁজুন..."
+          autocomplete="off"
+        />
+        <select class="catalog-select" id="genre-filter">
+          <option value="">সব ধরন</option>
+          {genres.map((g) => <option value={g}>{g}</option>)}
+        </select>
+        <select class="catalog-select" id="author-filter">
+          <option value="">সব লেখক</option>
+          {authors.map((a) => <option value={a}>{a}</option>)}
+        </select>
+        <select class="catalog-select" id="status-filter">
+          <option value="">সব অবস্থা</option>
+          <option value="in-progress">চলমান</option>
+          <option value="planned">পরিকল্পিত</option>
+          <option value="published">প্রকাশিত</option>
+        </select>
+      </div>
+
+      <p class="catalog-count" id="catalog-count"></p>
+
+      <!-- Book Grid -->
+      <div class="book-grid" id="book-grid">
+        {sortedBooks.map((book) => (
+          <div
+            class="book-grid-item"
+            data-title={book.data.title}
+            data-title-en={book.data.titleEn}
+            data-author={book.data.author}
+            data-author-en={book.data.authorEn}
+            data-genre={book.data.genre}
+            data-status={book.data.status}
+          >
+            <BookCard
+              title={book.data.title}
+              author={book.data.author}
+              genre={book.data.genre}
+              status={book.data.status}
+              coverColor={book.data.coverColor}
+              slug={book.id}
+            />
+          </div>
+        ))}
+      </div>
+
+      <p class="no-results" id="no-results" hidden>
+        কোনো বই পাওয়া যায়নি। অনুসন্ধানের শব্দ পরিবর্তন করে আবার চেষ্টা করুন।
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .no-results {
+    text-align: center;
+    padding: var(--space-3xl);
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+  }
+</style>
+
+<script>
+  // Client-side search and filter
+  const searchInput = document.getElementById("book-search") as HTMLInputElement;
+  const genreFilter = document.getElementById("genre-filter") as HTMLSelectElement;
+  const authorFilter = document.getElementById("author-filter") as HTMLSelectElement;
+  const statusFilter = document.getElementById("status-filter") as HTMLSelectElement;
+  const grid = document.getElementById("book-grid")!;
+  const items = grid.querySelectorAll<HTMLElement>(".book-grid-item");
+  const noResults = document.getElementById("no-results")!;
+  const countEl = document.getElementById("catalog-count")!;
+
+  // Pre-fill from URL params
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("genre")) genreFilter.value = params.get("genre")!;
+  if (params.get("author")) authorFilter.value = params.get("author")!;
+  if (params.get("status")) statusFilter.value = params.get("status")!;
+
+  function filterBooks() {
+    const q = searchInput.value.toLowerCase();
+    const genre = genreFilter.value;
+    const author = authorFilter.value;
+    const status = statusFilter.value;
+    let visible = 0;
+
+    items.forEach((item) => {
+      const title = (item.dataset.title || "").toLowerCase();
+      const titleEn = (item.dataset.titleEn || "").toLowerCase();
+      const auth = item.dataset.author || "";
+      const authEn = (item.dataset.authorEn || "").toLowerCase();
+      const gen = item.dataset.genre || "";
+      const stat = item.dataset.status || "";
+
+      const textMatch = !q || title.includes(q) || titleEn.includes(q) || auth.toLowerCase().includes(q) || authEn.includes(q);
+      const genreMatch = !genre || gen === genre;
+      const authorMatch = !author || auth === author;
+      const statusMatch = !status || stat === status;
+
+      const show = textMatch && genreMatch && authorMatch && statusMatch;
+      item.style.display = show ? "" : "none";
+      if (show) visible++;
+    });
+
+    noResults.hidden = visible > 0;
+    countEl.textContent = visible === items.length
+      ? `${visible}টি বই`
+      : `${visible}/${items.length}টি বই প্রদর্শিত`;
+  }
+
+  searchInput.addEventListener("input", filterBooks);
+  genreFilter.addEventListener("change", filterBooks);
+  authorFilter.addEventListener("change", filterBooks);
+  statusFilter.addEventListener("change", filterBooks);
+
+  filterBooks();
+</script>

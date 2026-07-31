@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="পৃষ্ঠা পাওয়া যায়নি" description="৪০৪ - কাঙ্ক্ষিত পৃষ্ঠাটি পাওয়া যায়নি">
+  <div style="min-height: 60vh; display: flex; align-items: center; justify-content: center; padding: var(--space-3xl) var(--space-lg); text-align: center;">
+    <div style="max-width: 500px;">
+      <div style="font-family: var(--font-serif); font-size: 5rem; font-weight: 700; color: var(--color-brand-text); line-height: 1;">৪০৪</div>
+      <h1 style="font-family: var(--font-serif); font-size: 1.8rem; font-weight: 700; margin-top: var(--space-md); margin-bottom: var(--space-sm);">
+        পৃষ্ঠাটি পাওয়া যায়নি
+      </h1>
+      <p style="color: var(--color-text-muted); font-size: 1rem; margin-bottom: var(--space-xl); line-height: 1.7;">
+        আপনি যে পৃষ্ঠাটি খুঁজছেন তা হয়তো স্থানান্তরিত হয়েছে, মুছে ফেলা হয়েছে অথবা ভুল লিংক টাইপ করা হয়েছে।
+      </p>
+      <a href="/" class="btn btn-primary">
+        🏠 হোমপেজে ফিরে যান
+      </a>
+    </div>
+  </div>
+</BaseLayout>

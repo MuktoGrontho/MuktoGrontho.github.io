@@ -1,0 +1,144 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const {
+  title,
+  description = "মুক্তগ্রন্থ — উচ্চমানের বাংলা ই-বই, সকলের জন্য মুক্ত।",
+  currentPath = Astro.url.pathname,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="bn" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{title} — মুক্তগ্রন্থ</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="মুক্তগ্রন্থ" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>"
+    />
+    <style>
+      @import "../styles/global.css";
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-inner">
+        <a href="/" class="nav-brand">
+          <span class="nav-brand-icon">📖</span>
+          <span>মুক্তগ্রন্থ</span>
+        </a>
+        <button
+          class="nav-toggle"
+          id="nav-toggle"
+          aria-label="মেনু খুলুন"
+          aria-expanded="false"
+        >
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" id="nav-links">
+          <a
+            href="/books/"
+            class:list={["nav-link", { "": currentPath.startsWith("/books") }]}
+            aria-current={currentPath.startsWith("/books") ? "page" : undefined}
+            >📚 ই-বই</a
+          >
+          <a
+            href="/about/"
+            class="nav-link"
+            aria-current={currentPath === "/about/" ? "page" : undefined}
+            >পরিচিতি</a
+          >
+          <a
+            href="/roadmap/"
+            class="nav-link"
+            aria-current={currentPath === "/roadmap/" ? "page" : undefined}
+            >রোডম্যাপ</a
+          >
+          <a
+            href="/contribute/"
+            class="nav-link"
+            aria-current={currentPath === "/contribute/" ? "page" : undefined}
+            >অবদান</a
+          >
+          <a
+            href="https://github.com/MuktoGrontho"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="nav-cta"
+          >
+            GitHub ↗
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-inner">
+          <div>
+            <div class="footer-brand-name">মুক্তগ্রন্থ</div>
+            <p class="footer-tagline">কারণ সাহিত্য সকলের।</p>
+            <p class="footer-tagline" style="font-family:var(--font-en);font-style:italic;font-size:0.8rem">
+              Because literature belongs to everyone.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>ব্রাউজ</h4>
+            <ul>
+              <li><a href="/books/">সব ই-বই</a></li>
+              <li><a href="/about/">আমাদের সম্পর্কে</a></li>
+              <li><a href="/roadmap/">রোডম্যাপ</a></li>
+              <li><a href="/contribute/">অবদান রাখুন</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>ডকুমেন্টেশন</h4>
+            <ul>
+              <li><a href="https://github.com/MuktoGrontho/muktogrontho/blob/main/docs/STYLE_GUIDE.md" target="_blank" rel="noopener noreferrer">স্টাইল গাইড</a></li>
+              <li><a href="https://github.com/MuktoGrontho/muktogrontho/blob/main/docs/PRODUCTION_GUIDE.md" target="_blank" rel="noopener noreferrer">প্রোডাকশন গাইড</a></li>
+              <li><a href="https://github.com/MuktoGrontho/muktogrontho/blob/main/docs/TYPOGRAPHY.md" target="_blank" rel="noopener noreferrer">টাইপোগ্রাফি</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>অনুপ্রেরণা</h4>
+            <ul>
+              <li><a href="https://standardebooks.org" target="_blank" rel="noopener noreferrer">Standard Ebooks</a></li>
+              <li><a href="https://bn.wikisource.org" target="_blank" rel="noopener noreferrer">বাংলা উইকিসংকলন</a></li>
+              <li><a href="https://fonts.google.com/noto" target="_blank" rel="noopener noreferrer">Google Noto Fonts</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>কন্টেন্ট: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0</a> · কোড: <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT</a></p>
+          <p style="margin-top:var(--space-xs)">❤️ বাংলাদেশ ও পশ্চিমবঙ্গ থেকে ভালোবাসায় তৈরি</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Mobile nav toggle
+      const toggle = document.getElementById("nav-toggle");
+      const links = document.getElementById("nav-links");
+      toggle?.addEventListener("click", () => {
+        const open = links?.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", String(open));
+      });
+    </script>
+  </body>
+</html>

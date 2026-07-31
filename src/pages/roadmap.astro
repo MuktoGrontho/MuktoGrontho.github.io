@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="রোডম্যাপ" description="মুক্তগ্রন্থ প্রকল্পের পর্যায়ক্রমিক রূপরেখা ও ভবিষ্যৎ পরিকল্পনা">
+  <header class="page-header">
+    <div class="container">
+      <h1>রোডম্যাপ</h1>
+      <p class="subtitle">প্রকল্পের পর্যায়ক্রমিক রূপরেখা</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <div style="max-width: 840px; margin-inline: auto;">
+        
+        <!-- Phase 1 -->
+        <div class="roadmap-phase">
+          <div class="phase-number">১</div>
+          <div class="phase-content">
+            <h3>
+              ভিত্তি স্থাপন (১-৬ মাস)
+              <span class="phase-badge" style="color: var(--color-status-active); background: light-dark(#f0fdf4, #0a1f14); border: 1px solid rgba(22, 163, 74, 0.25);">চলমান</span>
+            </h3>
+            <ul>
+              <li>ওয়েবসাইট ও ডিজিটাল লাইব্রেরি ইনফ্রাস্ট্রাকচার তৈরি ও প্রকাশ</li>
+              <li>প্রথম ব্যাচের ১০টি কালজয়ী বাংলা সাহিত্য ই-বই তৈরি (রবীন্দ্রনাথ, শরৎচন্দ্র, বঙ্কিমচন্দ্র ইত্যাদি)</li>
+              <li>স্ট্যান্ডার্ড ই-বুকস ফরম্যাট অনুকরণে মুক্তগ্রন্থ ফরম্যাটিং নির্দেশিকা (Style Guide) চূড়ান্তকরণ</li>
+              <li>ওপেন-সোয়ার্স টাইপোগ্রাফি ও Noto Serif Bengali ফন্ট অপ্টিমাইজেশন</li>
+              <li>প্রুফরিডিং ও ওসিআর (OCR) ডাটা প্রক্রিয়াকরণ পাইপলাইন চালু</li>
+              <li>GitHub-ভিত্তিক পাবলিক অবদান প্রক্রিয়া এবং টাইপোগ্রাফি গাইড ডকুমেন্টেশন প্রকাশ</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="roadmap-phase">
+          <div class="phase-number">২</div>
+          <div class="phase-content">
+            <h3>
+              সম্প্রসারণ (৭-১৮ মাস)
+              <span class="phase-badge" style="color: var(--color-status-planned); background: light-dark(#fefce8, #1f1a0a); border: 1px solid rgba(217, 119, 6, 0.25);">পরিকল্পিত</span>
+            </h3>
+            <ul>
+              <li>লাইব্রেরিতে ৫০টির বেশি ক্লাসিক বাংলা বই রূপান্তর ও নিয়মিত প্রকাশ</li>
+              <li>Kobo, Kindle (AZW3/KFX), এবং সরাসরি ব্রাউজার রিডারের জন্য অপ্টিমাইজড ডাউনলোড সংস্করণ প্রদান</li>
+              <li>ওয়েব-ভিত্তিক অডিও বুক বা টেক্সট-টু-স্পিচ (TTS) ফিচার একীভূতকরণ</li>
+              <li>স্বয়ংক্রিয় লিন্টিং ও EPUB ভ্যালিডেশন টুলস (muktogrontho-cli) তৈরি</li>
+              <li>একাধিক উৎসের (উইকিসংকলন, ন্যাশনাল ডিজিটাল লাইব্রেরি) কন্টেন্ট সংগ্রাহক অটোমেশন পাইপলাইন</li>
+              <li>কমিউনিটি ভলান্টিয়ার টিম গঠন ও প্রুফরিডিং রিভিও প্রসেস বিস্তৃত করা</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="roadmap-phase">
+          <div class="phase-number">৩</div>
+          <div class="phase-content">
+            <h3>
+              পরিপক্কতা (চলমান)
+              <span class="phase-badge" style="color: var(--color-status-planned); background: light-dark(#fefce8, #1f1a0a); border: 1px solid rgba(217, 119, 6, 0.25);">ভবিষ্যৎ</span>
+            </h3>
+            <ul>
+              <li>১০০+ পূর্ণাঙ্গ উচ্চমানের ডিজিটাল সংস্করণ সমৃদ্ধ উন্মুক্ত বাংলা ই-বুক ভাণ্ডার গড়ে তোলা</li>
+              <li>সম্পূর্ণ অফলাইন সুবিধা সহ PWA (Progressive Web App) রিডিং এক্সপেরিয়েন্স যুক্ত করা</li>
+              <li>বিরল ও দুর্লভ বাংলা বই সংরক্ষণে বিশেষ ডিজিটাইজেশন ড্রাইভ পরিচালনা</li>
+              <li>বিভিন্ন শিক্ষাপ্রতিষ্ঠান ও লাইব্রেরির সাথে যৌথ উদ্যোগ ও উন্মুক্ত সাহিত্য প্রচার</li>
+              <li>ই-বই মেটাডাটা ও পাবলিক এপিআই (OPDS Catalog) সুবিধা চালু করা</li>
+              <li>সার্বিক রক্ষণাবেক্ষণ ও দীর্ঘমেয়াদী উন্মুক্ত ডিজিটাল সাহিত্য আর্কাইভ নিশ্চিতকরণ</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+</BaseLayout>

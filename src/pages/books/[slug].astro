@@ -1,0 +1,160 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const books = await getCollection("books");
+  return books.map((book) => ({
+    params: { slug: book.id },
+    props: { book },
+  }));
+}
+
+const { book } = Astro.props;
+const { Content } = await render(book);
+
+const statusLabels: Record<string, string> = {
+  planned: "পরিকল্পিত",
+  "in-progress": "চলমান",
+  published: "প্রকাশিত",
+};
+
+// Copyright status
+const copyrightExpiry = book.data.authorDeathYear + 60;
+const isPublicDomain = new Date().getFullYear() >= copyrightExpiry;
+---
+
+<BaseLayout
+  title={book.data.title}
+  description={`${book.data.title} — ${book.data.author}। মুক্তগ্রন্থ সংস্করণ।`}
+  currentPath={`/books/${book.id}/`}
+>
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">মুক্তগ্রন্থ</a> /
+      <a href="/books/">ই-বই</a> /
+      <span>{book.data.title}</span>
+    </nav>
+
+    <div class="book-detail">
+      <!-- Cover -->
+      <div
+        class="book-detail-cover"
+        style={`background: linear-gradient(160deg, ${book.data.coverColor}, color-mix(in oklch, ${book.data.coverColor}, #000 35%));`}
+      >
+        <div class="book-cover-title" style="font-size:1.4rem;">
+          {book.data.title}
+        </div>
+        <div class="book-cover-author" style="margin-top:var(--space-xs);">
+          {book.data.author}
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="book-detail-info">
+        <h1>{book.data.title}</h1>
+        <p class="book-detail-en">{book.data.titleEn}</p>
+        <p class="book-detail-author">
+          {book.data.author}
+          <span style="color:var(--color-text-subtle);font-size:0.88rem;margin-left:var(--space-sm);">
+            ({book.data.authorEn})
+          </span>
+        </p>
+
+        <div class="book-detail-meta">
+          <span class="meta-item">
+            <strong>ধরন:</strong> {book.data.genre} ({book.data.genreEn})
+          </span>
+          {book.data.yearPublished && (
+            <span class="meta-item">
+              <strong>প্রকাশ:</strong> {book.data.yearPublished}
+            </span>
+          )}
+          <span class="meta-item">
+            <strong>লেখকের মৃত্যু:</strong> {book.data.authorDeathYear}
+          </span>
+          <span
+            class="status-badge"
+            data-status={book.data.status}
+          >
+            {statusLabels[book.data.status]}
+          </span>
+        </div>
+
+        <!-- Copyright info -->
+        <div class="copyright-box">
+          {isPublicDomain ? (
+            <p class="copyright-ok">
+              ✅ <strong>পাবলিক ডোমেইন:</strong> কপিরাইট মেয়াদ {copyrightExpiry}
+              সালে শেষ হয়েছে (লেখকের মৃত্যু + ৬০ বছর)।
+            </p>
+          ) : (
+            <p class="copyright-warn">
+              ⚠️ <strong>যাচাই প্রয়োজন:</strong> কপিরাইট মেয়াদ আনুমানিক{" "}
+              {copyrightExpiry} সাল পর্যন্ত। প্রকৃত স্ট্যাটাস আইনজীবীর
+              পরামর্শ অনুযায়ী নিশ্চিত করতে হবে।
+            </p>
+          )}
+        </div>
+
+        <!-- Body (markdown content) -->
+        <div class="book-detail-body">
+          <Content />
+        </div>
+
+        <!-- Source link -->
+        {book.data.source && (
+          <a
+            href={book.data.source}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="book-source-link"
+          >
+            📄 উৎস দেখুন ↗
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .breadcrumb {
+    padding: var(--space-lg) 0;
+    font-size: 0.82rem;
+    color: var(--color-text-subtle);
+  }
+
+  .breadcrumb a {
+    color: var(--color-text-muted);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-brand-text);
+  }
+
+  .breadcrumb span {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .copyright-box {
+    margin-top: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .copyright-ok {
+    background: light-dark(#f0fdf4, #0a1f14);
+    color: light-dark(#166534, #86efac);
+    border: 1px solid light-dark(#bbf7d0, #14532d);
+  }
+
+  .copyright-warn {
+    background: light-dark(#fefce8, #1f1a0a);
+    color: light-dark(#854d0e, #fde047);
+    border: 1px solid light-dark(#fef08a, #713f12);
+  }
+</style>
